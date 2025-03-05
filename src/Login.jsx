@@ -150,7 +150,7 @@ export const Login = () => {
 						<p className='text-xl'>Please fill all values</p>
 						<span>
 							<p className='text-xl font-bold'>
-								Title <p className='text-red-500 inline'>*</p>{" "}
+								Title <span className='text-red-500 inline'>*</span>{" "}
 							</p>
 							<input
 								className='rounded-xl p-3'
@@ -162,7 +162,7 @@ export const Login = () => {
 						</span>
 						<span>
 							<p className='text-xl font-bold'>
-								Date <p className='text-red-500 inline'>*</p>{" "}
+								Date <span className='text-red-500 inline'>*</span>{" "}
 							</p>
 							<input
 								type='date'
@@ -175,7 +175,7 @@ export const Login = () => {
 						</span>
 						<span>
 							<p className='text-xl font-bold text-center'>
-								Start Time <p className='text-red-500 inline'>*</p>{" "}
+								Start Time <span className='text-red-500 inline'>*</span>{" "}
 							</p>
 							<input
 								type='time'
@@ -188,7 +188,7 @@ export const Login = () => {
 						</span>
 						<span>
 							<p className='text-xl font-bold text-center'>
-								End Time <p className='text-red-500 inline'>*</p>{" "}
+								End Time <span className='text-red-500 inline'>*</span>{" "}
 							</p>
 							<input
 								type='time'
@@ -201,7 +201,7 @@ export const Login = () => {
 						</span>
 						<span>
 							<p className='text-xl font-bold'>
-								Location/Description <p className='text-red-500 inline'>*</p>{" "}
+								Location/Description <span className='text-red-500 inline'>*</span>{" "}
 							</p>
 							<input
 								className='rounded-xl p-3'
