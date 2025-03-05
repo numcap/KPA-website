@@ -41,7 +41,10 @@ export const Navbar = () => {
 						onClick={() => setMenuActive(true)}
 					/>
 					{menuActive ? (
-						<div className="bg-neutral-400 bg-opacity-55 w-[100vw] h-[100vh] absolute top-0 left-0" onClick={() => setMenuActive(false)}>
+						<div
+							className='bg-neutral-400 bg-opacity-55 w-[100vw] h-[100vh] absolute top-0 left-0'
+							onClick={() => setMenuActive(false)}
+						>
 							<div className='absolute h-[100vh] w-40 right-0 top-0 bg-white flex flex-col justify-center items-center gap-6 animate-slideIn'>
 								<RxCross1
 									className='h-9 w-9 mb-10'
@@ -89,6 +92,21 @@ export const Navbar = () => {
 								>
 									Contact
 								</button>
+								<button
+									className={scrollPosition.calendar ? btn_active : btn}
+									onClick={() => {
+										setScrollPosition({
+											home: false,
+											about: false,
+											contact: false,
+											calendar: true,
+										});
+										setMenuActive(false);
+										window.scrollTo(0, 2800);
+									}}
+								>
+									Calendar
+								</button>
 							</div>
 						</div>
 					) : null}
@@ -99,7 +117,12 @@ export const Navbar = () => {
 						className={scrollPosition.home ? btn_active : btn}
 						onClick={() => {
 							window.scroll(0, 0);
-							setScrollPosition({ home: true, about: false, contact: false });
+							setScrollPosition({
+								home: true,
+								about: false,
+								contact: false,
+								calendar: false,
+							});
 						}}
 					>
 						Home
@@ -108,7 +131,12 @@ export const Navbar = () => {
 						className={scrollPosition.about ? btn_active : btn}
 						onClick={() => {
 							window.scroll(0, 750);
-							setScrollPosition({ home: false, about: true, contact: false });
+							setScrollPosition({
+								home: false,
+								about: true,
+								contact: false,
+								calendar: false,
+							});
 						}}
 					>
 						About
@@ -117,10 +145,29 @@ export const Navbar = () => {
 						className={scrollPosition.contact ? btn_active : btn}
 						onClick={() => {
 							window.scrollTo(0, 1400);
-							setScrollPosition({ home: false, about: false, contact: true });
+							setScrollPosition({
+								home: false,
+								about: false,
+								contact: true,
+								calendar: false,
+							});
 						}}
 					>
 						Contact
+					</button>
+					<button
+						className={scrollPosition.calendar ? btn_active : btn}
+						onClick={() => {
+							window.scrollTo(0, 1900);
+							setScrollPosition({
+								home: false,
+								about: false,
+								contact: false,
+								calendar: true,
+							});
+						}}
+					>
+						Calendar
 					</button>
 				</div>
 			)}

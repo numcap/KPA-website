@@ -7,6 +7,7 @@ export const PositionProvider = ({ children }) => {
 		home: true,
 		about: false,
 		contact: false,
+		calendar: false,
 	});
 
 	return (

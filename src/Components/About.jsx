@@ -1,17 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePositionValue } from "../contexts";
+import { useInView } from "react-intersection-observer";
 
 export const About = () => {
-	const { scrollPosition } = usePositionValue();
+	const { setScrollPosition } = usePositionValue();
 	const [inFocus, setInFocus] = useState(false);
 
-	document.addEventListener("scroll", () => {
-		if (scrollPosition.about == true) {
+	const { ref, inView } = useInView({ threshold: 1 });
+
+	useEffect(() => {
+		if (inView) {
+			setScrollPosition({ home: false, about: true, contact: false, calendar: false });
 			setInFocus(true);
 		} else {
 			setInFocus(false);
 		}
-	});
+	}, [inView]);
 
 	const divInFocus =
 		"mx-10 my-40 sm:mx-28 md:m-40 p-10 bg-neutral-100 rounded-3xl scale-[1.07] bg-opacity-90 transition-all duration-300 3xl:mx-[30vw]";
@@ -20,7 +24,7 @@ export const About = () => {
 		"mx-10 my-40 md:m-40 p-10 bg-neutral-100 bg-opacity-30 rounded-3xl transition-all duration-300 3xl:mx-[30vw] sm:";
 
 	return (
-		<div className={inFocus ? divInFocus : div}>
+		<div ref={ref} className={inFocus ? divInFocus : div}>
 			<h1 className='text-center text-5xl sm:text-7xl font-medium '>
 				About us
 			</h1>
