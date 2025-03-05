@@ -55,32 +55,43 @@ export const Calendar = () => {
 			</p>
 			<span ref={ref} className='flex flex-col gap-16'>
 				{!loading ? (
-					eventsInfo.map((eventInfo) => {
-						return (
-							<div className='flex gap-12' key={eventInfo.event_id}>
-								<div className='flex flex-col items-center'>
-									<p className='font-extralight text-3xl'>
-										{new Date(eventInfo.date).toString().split(" ")[1]}
-									</p>
-									<p className='font-bold text-5xl'>
-										{new Date(eventInfo.date).toString().split(" ")[2]}
-									</p>
+					eventsInfo.length > 0 ? (
+						eventsInfo.map((eventInfo) => {
+							return (
+								<div className='flex gap-12' key={eventInfo.event_id}>
+									<div className='flex flex-col items-center'>
+										<p className='font-extralight text-3xl'>
+											{new Date(eventInfo.date).toString().split(" ")[1]}
+										</p>
+										<p className='font-bold text-5xl'>
+											{new Date(eventInfo.date).toString().split(" ")[2]}
+										</p>
+									</div>
+									<div className='flex flex-col py-1'>
+										<p>
+											{convertToAmPm(eventInfo.start_time)} -{" "}
+											{convertToAmPm(eventInfo.end_time)}
+										</p>
+										<p className='text-2xl font-extrabold text-wrap'>
+											{eventInfo.title}
+										</p>
+										<p className='text-1xl font-light text-wrap'>
+											{eventInfo.location}
+										</p>
+									</div>
 								</div>
-								<div className='flex flex-col py-1'>
-									<p>
-										{convertToAmPm(eventInfo.start_time)} -{" "}
-										{convertToAmPm(eventInfo.end_time)}
-									</p>
-									<p className='text-2xl font-extrabold text-wrap'>
-										{eventInfo.title}
-									</p>
-									<p className='text-1xl font-light text-wrap'>
-										{eventInfo.location}
-									</p>
-								</div>
-							</div>
-						);
-					})
+							);
+						})
+					) : (
+						<>
+							<p className='text-center text-2xl'>
+								Looks Like There Are No Events Coming Up...
+							</p>
+							<p className='text-center text-2xl'>
+								Stay Tuned for Any Upcoming Events
+							</p>
+						</>
+					)
 				) : (
 					<div className='m-10 flex justify-center'>
 						<CgSpinner className='z-50 w-32 h-32 animate-spin text-black' />
