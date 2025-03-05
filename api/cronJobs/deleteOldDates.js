@@ -8,7 +8,9 @@ const pool = new Pool({
 	ssl: { rejectUnauthorized: false },
 });
 
+// handles cron job request by vercel
 export const GET = async (req) => {
+	// verify the authorization with cron secret string
 	if (
 		req.headers.get("Authorization") !== `Bearer ${process.env.CRON_SECRET}`
 	) {
@@ -18,6 +20,7 @@ export const GET = async (req) => {
 		);
 	}
 	try {
+		// clear old events in order to reduce strain on the db
 		await pool.query(
 			"DELETE FROM calendar_dates WHERE date < CURRENT_DATE - INTERVAL '3 DAY"
 		);

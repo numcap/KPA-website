@@ -7,10 +7,12 @@ const pool = new Pool({
 	ssl: { rejectUnauthorized: false },
 });
 
+// handle post requests
 export const POST = async (req) => {
 	const body = await req.json();
 	const { title, date, startTime, endTime, location } = body;
 
+	// query the db using the data given
 	try {
         await pool.query(
             "INSERT INTO calendar_dates(title, date, start_time, end_time, location) VALUES($1, $2, $3, $4, $5)",
@@ -24,8 +26,10 @@ export const POST = async (req) => {
 	}
 };
 
+// handle get requests
 export const GET = async () => {
     try {
+		// query the db for the latest events
         const data = await pool.query("SELECT * FROM public.calendar_dates WHERE date > CURRENT_DATE - INTERVAL '2 DAY' ORDER BY date ASC ")
         return new Response(JSON.stringify({events: data.rows}), {status: 200})
     } catch (error) {

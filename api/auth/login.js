@@ -13,6 +13,7 @@ const pool = new Pool({
 	ssl: { rejectUnauthorized: false },
 });
 
+// handle post requests
 export const POST = async (req) => {
 	try {
 		const body = await req.json();
@@ -23,16 +24,21 @@ export const POST = async (req) => {
 			username,
 		]);
 
+		// if the db does not have the users username then return user not found
 		if (!user.rowCount) {
 			return new Response(JSON.stringify({ error: "User Not Found" }), {
 				status: 401,
 			});
 		}
 
+
 		const hashed_password = user.rows[0].password_hash;
 		const id = user.rows[0].id;
 
+
+		// compare the password obtained and the hashed password from the db
 		if (await bcrypt.compare(password, hashed_password)) {
+			// if it true then return access token and refresh token to user
 			const accessToken = jwt.sign(
 				{ username: username, id: id },
 				process.env.ACCESS_TOKEN_SECRET,
@@ -50,6 +56,7 @@ export const POST = async (req) => {
 				id,
 			]);
 
+			// respond with access token in body, and refresh token in a httpOnly cookie 
 			return new Response(JSON.stringify({ accessToken }), {
 				status: 200,
 				headers: {

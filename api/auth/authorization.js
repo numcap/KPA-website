@@ -3,22 +3,22 @@ import process from "process";
 import { parse } from "cookie";
 import pg from "pg";
 
+// connecting to postgres db on Neon
 const { Pool } = pg;
 const pool = new Pool({
 	connectionString: process.env.PG_STRING,
 	ssl: { rejectUnauthorized: false },
 });
 
+// handling Post request
 export const POST = async (req) => {
 	try {
+		// obtain refresh token and access token
 		const authHeader =
 			req.headers.get("Authorization") === "undefined"
 				? false
 				: req.headers.get("Authorization");
 
-		// this is for the refresh token
-		// const cookies = parse(req.headers.get("cookie") || ""); // Parse cookie string
-		// const refreshToken = cookies.refresh_token; // Get the refresh token
 		const cookies = parse(req.headers.get("cookie") || "");
 		const refreshToken = cookies.refresh_token;
 
@@ -27,11 +27,13 @@ export const POST = async (req) => {
 			[refreshToken]
 		);
 
+		// check if there is Access token
 		if (!authHeader) {
 			generateNewAccessToken(refreshToken, user);
 		}
 
 		try {
+			// check the access token, if verified then return ok status
 			jwt.verify(authHeader, process.env.ACCESS_TOKEN_SECRET);
 			return new Response(
 				JSON.stringify({ verified: "This user is verified" }),
@@ -49,7 +51,9 @@ export const POST = async (req) => {
 	}
 };
 
+
 function generateNewAccessToken(refreshToken, user) {
+	// check if user has an refresh token saved, if not they need to sign in
 	if (!user.rowCount || user.rows[0].reset_token != refreshToken) {
 		return new Response(JSON.stringify({ error: "Please sign in" }), {
 			status: 403,
@@ -57,6 +61,7 @@ function generateNewAccessToken(refreshToken, user) {
 	}
 
 	try {
+		// verify the refresh token, and sign a new access token to return
 		jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 		const accessToken = jwt.sign(
 			{ username: user.rows[0].username, id: user.rows[0].id },
@@ -65,6 +70,7 @@ function generateNewAccessToken(refreshToken, user) {
 		);
 		return new Response(JSON.stringify({ accessToken }), { status: 200 });
 	} catch {
+		// if it throws an error then the refresh token could not be verified
 		return new Response(
 			JSON.stringify({ error: "Could not verify refresh token" }),
 			{
