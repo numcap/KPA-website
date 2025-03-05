@@ -33,7 +33,7 @@ export const Calendar = () => {
 	}
 
 	async function fetchEvents() {
-		setLoading(true);
+		setLoading(true); //uncomment in prod
 		await fetch("/api/calendar/addEvent", {
 			method: "GET",
 			headers: {
@@ -58,7 +58,7 @@ export const Calendar = () => {
 					eventsInfo.length > 0 ? (
 						eventsInfo.map((eventInfo) => {
 							return (
-								<div className='flex gap-12' key={eventInfo.event_id}>
+								<div className='flex sm:flex-row flex-col sm:gap-12 gap-5' key={eventInfo.event_id}>
 									<div className='flex flex-col items-center'>
 										<p className='font-extralight text-3xl'>
 											{new Date(eventInfo.date).toString().split(" ")[1]}
@@ -67,15 +67,15 @@ export const Calendar = () => {
 											{new Date(eventInfo.date).toString().split(" ")[2]}
 										</p>
 									</div>
-									<div className='flex flex-col py-1'>
-										<p>
+									<div className='flex flex-col py-2'>
+										<p className="text-center sm:text-left">
 											{convertToAmPm(eventInfo.start_time)} -{" "}
 											{convertToAmPm(eventInfo.end_time)}
 										</p>
-										<p className='text-2xl font-extrabold text-wrap'>
+										<p className='text-2xl font-extrabold text-wrap text-center sm:text-left'>
 											{eventInfo.title}
 										</p>
-										<p className='text-1xl font-light text-wrap'>
+										<p className='text-1xl font-light text-wrap text-center sm:text-left'>
 											{eventInfo.location}
 										</p>
 									</div>

@@ -1,0 +1,16 @@
+{
+    "framework": "vite",
+    "cleanUrls": true,
+    "crons": [
+        {
+            "path": "/api/cronJobs/deleteOldDates",
+            "schedule": "0 0 * * 1"
+        }
+    ],
+    "rewrites": [
+        {
+            "source": "/login",
+            "destination": "/"
+        }
+    ]
+}

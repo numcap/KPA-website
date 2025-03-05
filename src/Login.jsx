@@ -17,6 +17,10 @@ export const Login = () => {
 	const [verified, setVerified] = useState(false);
 	const [loadingScreen, setLoadingScreen] = useState(false);
 	const [invalidCredentials, setInvalidCredentials] = useState(false);
+	const [eventAddModal, setEventAddModal] = useState({
+		eventAdded: false,
+		error: false,
+	});
 
 	async function handleLogIn() {
 		setLoadingScreen(true);
@@ -63,7 +67,7 @@ export const Login = () => {
 		const data = await res.json();
 		if (res.ok) {
 			if ("accessToken" in data) {
-				Cookies.set("access_token", data.accessToken, {expires: 1});
+				Cookies.set("access_token", data.accessToken, { expires: 1 });
 			}
 			setVerified(true);
 		} else {
@@ -73,16 +77,34 @@ export const Login = () => {
 	}
 
 	async function handleAddEvent() {
-
+		if (
+			!eventInfo.date ||
+			!eventInfo.title ||
+			!eventInfo.endTime ||
+			!eventInfo.startTime ||
+			!eventInfo.location
+		) {
+			setEventAddModal({ eventAdded: false, error: true });
+			return;
+		}
 		await fetch("/api/calendar/addEvent", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify(eventInfo),
-		}).catch((e) => {
-			console.error(e);
-		});
+		})
+			.then((res) => {
+				if (res.ok) {
+					setEventAddModal({ eventAdded: true, error: false });
+				} else {
+					setEventAddModal({ eventAdded: false, error: true });
+				}
+			})
+			.catch((e) => {
+				setEventAddModal({ eventAdded: false, error: true });
+				console.error(e);
+			});
 	}
 
 	return (
@@ -122,63 +144,119 @@ export const Login = () => {
 					)}
 				</div>
 			) : (
-				<div className='fixed top-[50%] translate-y-[-50%] right-[50%] translate-x-[50%] flex flex-col bg-kings-green-100 p-10 rounded-xl gap-5 items-center'>
-					<p className='text-3xl'>Add a new Event to the calendar</p>
-					<span>
-						<p className='text-xl font-bold'>Title</p>
-						<input
-							className='rounded-xl p-3'
-							onChange={(e) => {
-								setEventInfo({ ...eventInfo, title: e.target.value });
-							}}
-						></input>
-					</span>
-					<span>
-						<p className='text-xl font-bold'>Date</p>
-						<input
-							type='date'
-							className='rounded-xl p-3'
-							onChange={(e) => {
-								setEventInfo({ ...eventInfo, date: e.target.value });
-							}}
-						></input>
-					</span>
-					<span>
-						<p className='text-xl font-bold text-center'>Start Time</p>
-						<input
-							type='time'
-							className='rounded-xl p-3 px-5'
-							onChange={(e) => {
-								setEventInfo({ ...eventInfo, startTime: e.target.value });
-							}}
-						></input>
-					</span>
-					<span>
-						<p className='text-xl font-bold text-center'>End Time</p>
-						<input
-							type='time'
-							className='rounded-xl p-3 px-5'
-							onChange={(e) => {
-								setEventInfo({ ...eventInfo, endTime: e.target.value });
-							}}
-						></input>
-					</span>
-					<span>
-						<p className='text-xl font-bold'>Location</p>
-						<input
-							className='rounded-xl p-3'
-							onChange={(e) => {
-								setEventInfo({ ...eventInfo, location: e.target.value });
-							}}
-						></input>
-					</span>
-					<button
-						className='bg-kings-green-300 w-fit p-2 rounded-xl transition-all hover:bg-kings-gold-500'
-						onClick={() => handleAddEvent()}
-					>
-						Add Event
-					</button>
-				</div>
+				<>
+					<div className='fixed top-[50%] translate-y-[-50%] right-[50%] translate-x-[50%] flex flex-col bg-kings-green-100 p-10 rounded-xl gap-5 items-center'>
+						<p className='text-3xl'>Add a new Event to the calendar</p>
+						<p className='text-xl'>Please fill all values</p>
+						<span>
+							<p className='text-xl font-bold'>
+								Title <p className='text-red-500 inline'>*</p>{" "}
+							</p>
+							<input
+								className='rounded-xl p-3'
+								onChange={(e) => {
+									setEventInfo({ ...eventInfo, title: e.target.value });
+								}}
+								value={eventInfo.title}
+							></input>
+						</span>
+						<span>
+							<p className='text-xl font-bold'>
+								Date <p className='text-red-500 inline'>*</p>{" "}
+							</p>
+							<input
+								type='date'
+								className='rounded-xl p-3'
+								onChange={(e) => {
+									setEventInfo({ ...eventInfo, date: e.target.value });
+								}}
+								value={eventInfo.date}
+							></input>
+						</span>
+						<span>
+							<p className='text-xl font-bold text-center'>
+								Start Time <p className='text-red-500 inline'>*</p>{" "}
+							</p>
+							<input
+								type='time'
+								className='rounded-xl p-3 px-5'
+								onChange={(e) => {
+									setEventInfo({ ...eventInfo, startTime: e.target.value });
+								}}
+								value={eventInfo.startTime}
+							></input>
+						</span>
+						<span>
+							<p className='text-xl font-bold text-center'>
+								End Time <p className='text-red-500 inline'>*</p>{" "}
+							</p>
+							<input
+								type='time'
+								className='rounded-xl p-3 px-5'
+								onChange={(e) => {
+									setEventInfo({ ...eventInfo, endTime: e.target.value });
+								}}
+								value={eventInfo.endTime}
+							></input>
+						</span>
+						<span>
+							<p className='text-xl font-bold'>
+								Location/Description <p className='text-red-500 inline'>*</p>{" "}
+							</p>
+							<input
+								className='rounded-xl p-3'
+								onChange={(e) => {
+									setEventInfo({ ...eventInfo, location: e.target.value });
+								}}
+								value={eventInfo.location}
+							></input>
+						</span>
+						<button
+							className='bg-kings-green-300 w-fit p-2 rounded-xl transition-all hover:bg-kings-gold-500'
+							onClick={() => handleAddEvent()}
+						>
+							Add Event
+						</button>
+					</div>
+					{eventAddModal.eventAdded && (
+						<div className='absolute flex flex-col bg-gray-500 text-white p-5 rounded-xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5/6 gap-5'>
+							<p>Your Event has been added with these Details</p>
+							<p>Title: {eventInfo.title}</p>
+							<p>Date: {eventInfo.date}</p>
+							<p>Start Time: {eventInfo.startTime}</p>
+							<p>End Time: {eventInfo.endTime}</p>
+							<p>Location/Description: {eventInfo.location}</p>
+							<button
+								className='py-2 m-3 rounded-full bg-kings-green-600'
+								onClick={() => {
+									setEventAddModal({ eventAdded: false, error: false });
+									setEventInfo({
+										title: "",
+										date: "",
+										startTime: "",
+										endTime: "",
+										location: "",
+									});
+								}}
+							>
+								Close
+							</button>
+						</div>
+					)}
+					{eventAddModal.error && (
+						<div className='absolute flex flex-col bg-gray-500 text-white p-5 rounded-xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-5/6'>
+							<p>There has been an error with your request</p>
+							<button
+								className='py-2 m-3 rounded-full bg-kings-green-600'
+								onClick={() => {
+									setEventAddModal({ eventAdded: false, error: false });
+								}}
+							>
+								Close
+							</button>
+						</div>
+					)}
+				</>
 			)}
 		</>
 	);
