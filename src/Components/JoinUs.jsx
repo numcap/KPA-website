@@ -6,7 +6,7 @@ import { useInView } from "react-intersection-observer";
 
 export const JoinUs = () => {
 	const { setScrollPosition } = usePositionValue();
-	const [inFocus, setInFocus] = useState(false);
+	const [, setInFocus] = useState(false);
 	const [isMobile, setIsMobile] = useState(undefined);
 
 	window.addEventListener("resize", () => {
@@ -37,31 +37,16 @@ export const JoinUs = () => {
 		}
 	}, [inView]);
 
-	const divInFocus =
-		"mx-14 my-10 w-fit sm:m-20 md:m-40 md:my-10 p-10 bg-neutral-100 rounded-3xl scale-[1.05] sm:scale-[1.20] bg-opacity-90 transition-all duration-300 3xl:mx-[30vw]";
-
-	const div =
-		"mx-10 my-40 my-10 w-fit md:mb-10 md:my-40 p-10 bg-neutral-100 bg-opacity-30 rounded-3xl transition-all duration-300 3xl:mx-[30vw]";
-
-	const optionInFocus =
-		"p-10 md:p-5 lg:p-10 sm:mx-10 md:mx-0 md:w-[30%] bg-neutral-100 rounded-3xl scale-[1.05] bg-opacity-90 transition-all duration-300 flex flex-col items-center justify-end";
-
-	const option =
-		"md:w-[30%] p-10 md:p-2 bg-neutral-100 rounded-3xl bg-opacity-30 transition-all duration-300 flex flex-col items-center justify-end";
 
 	return (
 		<>
-			<div className={isMobile ? divInFocus : inFocus ? divInFocus : div}>
+			<div className='mx-14 my-10 w-fit sm:m-20 md:m-40 md:my-10 p-10 bg-neutral-100 rounded-3xl bg-opacity-90 transition-all duration-300 3xl:mx-[30vw]'>
 				<h1 className='text-center lg:text-7xl md:text-4xl sm:text-4xl text-4xl font-medium'>
 					How to Get Involved
 				</h1>
 			</div>
 			<div className='flex place-content-center justify-evenly md:flex-row flex-col mx-16 gap-10'>
-				<div
-					className={
-						isMobile ? optionInFocus : inFocus ? optionInFocus : option
-					}
-				>
+				<div className='p-10 md:p-5 lg:p-10 sm:mx-10 md:mx-0 md:w-[30%] bg-neutral-100 rounded-3xl scale-[1.05] bg-opacity-90 transition-all duration-300 flex flex-col items-center justify-end'>
 					<h1 className='text-center text-3xl font-semibold pb-4'>Join Us</h1>
 					<h1 className='text-center text-balance'>
 						By Filling out this Google Form You can stay up to date with all the
@@ -73,11 +58,7 @@ export const JoinUs = () => {
 						</button>
 					</a>
 				</div>
-				<div
-					className={
-						isMobile ? optionInFocus : inFocus ? optionInFocus : option
-					}
-				>
+				<div className='p-10 md:p-5 lg:p-10 sm:mx-10 md:mx-0 md:w-[30%] bg-neutral-100 rounded-3xl bg-opacity-90 transition-all duration-300 flex flex-col items-center justify-end'>
 					<PiLinktreeLogo className='w-20 h-20' />
 					<p className='text-center'>Want More Information About Us?</p>
 					<p className='text-center'>
@@ -92,11 +73,7 @@ export const JoinUs = () => {
 						</button>
 					</a>
 				</div>
-				<div
-					className={
-						isMobile ? optionInFocus : inFocus ? optionInFocus : option
-					}
-				>
+				<div className='p-10 md:p-5 lg:p-10 sm:mx-10 md:mx-0 md:w-[30%] bg-neutral-100 rounded-3xl bg-opacity-90 transition-all duration-300 flex flex-col items-center justify-end'>
 					<FaInstagram className='w-20 h-20' />
 					<p className='text-center'>Want More Information About Us?</p>
 					<p className='text-center'>
